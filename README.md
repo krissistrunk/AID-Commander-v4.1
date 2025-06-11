@@ -82,25 +82,33 @@ Is your project...?
 ### 📖 **Core Documentation**
 | File | Purpose | When to Use |
 |------|---------|-------------|
-| `README.md` | This overview document | Start here to understand the process |
-| `AID_Workflow_Guide.md` | Complete methodology guide | Reference throughout project |
-| `ai_prd_assistant_guidelines_v2.md` | Instructions for AI PRD creation | When creating your PRD |
+| [`README.md`](README.md) | This overview document | Start here to understand the process |
+| [`AID_Workflow_Guide.md`](AID_Workflow_Guide.md) | Complete methodology guide | Reference throughout project |
+| [`ai_prd_assistant_guidelines_v2.md`](ai_prd_assistant_guidelines_v2.md) | Instructions for AI PRD creation | When creating your PRD |
 
 ### 📝 **Single PRD Approach (Simple-Medium Projects)**
 | File | Purpose | When to Use |
 |------|---------|-------------|
-| `AID_PRD_Template.md` | Blank PRD template | Copy and customize for your project |
+| [`AID_PRD_Template.md`](AID_PRD_Template.md) | Blank PRD template | Copy and customize for your project |
 | *(You'll create)* `YourProject_PRD.md` | Your completed PRD | Central requirements document |
 | *(You'll create)* `YourProject_Tasks.md` | Your task tracking list | Daily progress tracking |
 
 ### 🏗️ **Multi-Component Approach (Complex Projects)**
 | File | Purpose | When to Use |
 |------|---------|-------------|
-| `MPD_Template.md` | Master Program Document template | Copy for multi-component projects |
-| `Integration_Strategy_Template.md` | Cross-component integration guide | When components need to work together |
+| [`MPD_Template.md`](MPD_Template.md) | Master Program Document template | Copy for multi-component projects |
+| [`Integration_Strategy_Template.md`](Integration_Strategy_Template.md) | Cross-component integration guide | When components need to work together |
 | *(You'll create)* `YourProgram_MPD.md` | Your master program document | Coordinates all components |
 | *(You'll create)* `Component1_PRD.md` | Individual component PRD | For each major component |
 | *(You'll create)* `YourProgram_Integration.md` | Your integration strategy | How components connect |
+
+### 🔧 **Additional Resources**
+| File | Purpose | When to Use |
+|------|---------|-------------|
+| [`AID_AI_Orchestration_Design.md`](AID_AI_Orchestration_Design.md) | AI orchestration architecture | Understanding AI coordination |
+| [`AID_Data_Architecture.md`](AID_Data_Architecture.md) | Data structure guidelines | Planning data models |
+| [`App_creation_process_v2.md`](App_creation_process_v2.md) | Step-by-step app creation | Detailed implementation guide |
+| [`ai_prd_assistant_guidelines.md`](ai_prd_assistant_guidelines.md) | Original PRD guidelines | Alternative PRD approach |
 
 ## How You Interact with the Process
 
