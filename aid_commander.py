@@ -1,0 +1,367 @@
+#!/usr/bin/env python3
+"""
+AID Commander - Terminal-based tool for AI-Facilitated Iterative Development
+
+Core commands:
+- aid-commander init
+- aid-commander start --project-name <name>
+- aid-commander task add <task>
+- aid-commander review
+"""
+
+import argparse
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Any
+
+class AIDCommander:
+    def __init__(self):
+        self.config_dir = Path.home() / ".aid_commander"
+        self.config_file = self.config_dir / "config.json"
+        self.current_project = None
+        self.project_dir = None
+        
+    def init(self):
+        """Initialize AID Commander"""
+        print("🚀 Initializing AID Commander...")
+        
+        # Create config directory
+        self.config_dir.mkdir(exist_ok=True)
+        
+        # Create default config
+        config = {
+            "version": "1.0",
+            "created": datetime.now().isoformat(),
+            "projects": {},
+            "settings": {
+                "confidence_threshold": 95,
+                "default_approach": "single_prd"
+            }
+        }
+        
+        with open(self.config_file, 'w') as f:
+            json.dump(config, f, indent=2)
+            
+        print("✅ AID Commander initialized successfully!")
+        print(f"   Config saved to: {self.config_file}")
+        print("\n📖 Next steps:")
+        print("   1. Run: aid-commander start --project-name YourProject")
+        print("   2. Follow the interactive setup process")
+        
+    def start_project(self, project_name: str):
+        """Start a new AID project"""
+        print(f"🎯 Starting new AID project: {project_name}")
+        
+        # Create project directory
+        project_dir = Path.cwd() / project_name
+        project_dir.mkdir(exist_ok=True)
+        
+        # Project complexity assessment
+        print("\n📊 Project Complexity Assessment")
+        print("Answer these questions to choose the right approach:")
+        
+        questions = [
+            "Will your project have more than 5-7 major features?",
+            "Do you need multiple developers working simultaneously?", 
+            "Are there distinct modules for independent development?",
+            "Will different parts use different technologies?",
+            "Complex integration with multiple external systems?"
+        ]
+        
+        yes_count = 0
+        for i, question in enumerate(questions, 1):
+            answer = input(f"{i}. {question} (y/n): ").lower().strip()
+            if answer.startswith('y'):
+                yes_count += 1
+                
+        # Determine approach
+        if yes_count >= 3:
+            approach = "multi_component"
+            print(f"\n📈 Recommendation: Multi-Component Approach ({yes_count}/5 complex indicators)")
+        else:
+            approach = "single_prd"  
+            print(f"\n📉 Recommendation: Single PRD Approach ({yes_count}/5 complex indicators)")
+            
+        # Create project structure
+        self._create_project_structure(project_dir, approach, project_name)
+        
+        # Update config
+        self._update_project_config(project_name, project_dir, approach)
+        
+        print(f"\n🎉 Project {project_name} created successfully!")
+        print(f"📁 Location: {project_dir}")
+        print(f"🛠️ Approach: {approach}")
+        print(f"\n📖 Next steps:")
+        if approach == "single_prd":
+            print(f"   1. Edit {project_name}_PRD.md with your requirements")
+            print("   2. Run: aid-commander task generate")
+        else:
+            print(f"   1. Edit {project_name}_MPD.md to coordinate components") 
+            print("   2. Create component PRDs for each module")
+            print("   3. Run: aid-commander task generate")
+            
+    def _create_project_structure(self, project_dir: Path, approach: str, project_name: str):
+        """Create project files and directories"""
+        
+        if approach == "single_prd":
+            # Single PRD approach
+            prd_file = project_dir / f"{project_name}_PRD.md"
+            tasks_file = project_dir / f"{project_name}_Tasks.md"
+            
+            # Create basic PRD
+            prd_content = f"""# {project_name} - Product Requirements Document
+
+## 1. Document Control & Version History
+- **Document Version**: 1.0
+- **Created**: {datetime.now().strftime('%Y-%m-%d')}
+- **Project**: {project_name}
+- **Status**: Draft
+
+## 2. Introduction & Product Vision
+[Edit this section with your project vision]
+
+## 3. Core User Workflows & Experience
+[Define your key user workflows here]
+
+## 4. System Architecture & Technical Foundation
+[AI will suggest frameworks based on your requirements]
+
+## 5. Functional Requirements & Implementation Tasks
+[AI will generate tasks from your requirements]
+
+---
+*Generated by AID Commander*
+"""
+            prd_file.write_text(prd_content)
+            
+            # Create tasks file
+            tasks_content = f"""# {project_name} - Task Tracking
+
+## Task Status Legend
+- `[ ]` Ready to start (dependencies met)
+- `[!]` Waiting for clarification (AI confidence < 95%)
+- `[>]` AI is working on it
+- `[R]` Needs revision (review failed)
+- `[x]` Complete and approved
+
+## Implementation Tasks
+*Tasks will be generated from your PRD*
+
+---
+*Generated by AID Commander*
+"""
+            tasks_file.write_text(tasks_content)
+            
+        else:
+            # Multi-component approach
+            mpd_file = project_dir / f"{project_name}_MPD.md"
+            integration_file = project_dir / f"{project_name}_Integration.md"
+            
+            mpd_content = f"""# {project_name} - Master Program Document
+
+## 1. Program Overview & Strategic Vision
+[Edit with your program overview]
+
+## 2. Component Architecture & Relationships  
+[Define your major components here]
+
+## 3. Cross-Component Integration Strategy
+[Describe how components will work together]
+
+## 4. Development Coordination & Workflow
+[Plan your development approach]
+
+---
+*Generated by AID Commander*
+"""
+            mpd_file.write_text(mpd_content)
+            
+            integration_content = f"""# {project_name} - Integration Strategy
+
+## Component Integration Points
+[Define how your components integrate]
+
+## Data Flow Between Components
+[Describe data exchange patterns]
+
+## API Contracts
+[Define interfaces between components]
+
+---
+*Generated by AID Commander*
+"""
+            integration_file.write_text(integration_content)
+            
+        # Create source directories
+        (project_dir / "src").mkdir(exist_ok=True)
+        (project_dir / "tests").mkdir(exist_ok=True)
+        (project_dir / "docs").mkdir(exist_ok=True)
+        
+    def _update_project_config(self, project_name: str, project_dir: Path, approach: str):
+        """Update configuration with new project"""
+        if self.config_file.exists():
+            with open(self.config_file, 'r') as f:
+                config = json.load(f)
+        else:
+            config = {"projects": {}}
+            
+        config["projects"][project_name] = {
+            "path": str(project_dir),
+            "approach": approach,
+            "created": datetime.now().isoformat(),
+            "status": "active"
+        }
+        
+        with open(self.config_file, 'w') as f:
+            json.dump(config, f, indent=2)
+            
+    def add_task(self, task_description: str):
+        """Add a new task to current project"""
+        current_project = self._get_current_project()
+        if not current_project:
+            print("❌ No active project. Run 'aid-commander start --project-name <name>' first")
+            return
+            
+        print(f"📝 Adding task: {task_description}")
+        
+        # Simulate AI confidence check
+        print("🤖 AI Builder: Analyzing task complexity...")
+        confidence = 96  # Simulated
+        
+        if confidence >= 95:
+            status = "[ ]"  # Ready
+            print(f"✅ Task ready for implementation ({confidence}% confidence)")
+        else:
+            status = "[!]"  # Needs clarification
+            print(f"❓ Task needs clarification ({confidence}% confidence)")
+            clarification = input("AI needs clarification: What specific framework should be used? ")
+            print(f"✅ Clarification received: {clarification}")
+            status = "[ ]"
+            
+        # Add to tasks file
+        project_name = current_project["name"]
+        tasks_file = Path(current_project["path"]) / f"{project_name}_Tasks.md"
+        
+        if tasks_file.exists():
+            content = tasks_file.read_text()
+            new_task = f"\n{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
+            content += new_task
+            tasks_file.write_text(content)
+            print(f"✅ Task added to {tasks_file}")
+        else:
+            print(f"❌ Tasks file not found: {tasks_file}")
+            
+    def review_tasks(self):
+        """Review completed tasks"""
+        current_project = self._get_current_project()
+        if not current_project:
+            print("❌ No active project found")
+            return
+            
+        print("🔍 Reviewing project tasks...")
+        
+        project_name = current_project["name"]
+        tasks_file = Path(current_project["path"]) / f"{project_name}_Tasks.md"
+        
+        if tasks_file.exists():
+            content = tasks_file.read_text()
+            print(f"\n📋 Current tasks in {project_name}:")
+            print("=" * 50)
+            print(content)
+        else:
+            print(f"❌ No tasks file found: {tasks_file}")
+            
+    def _get_current_project(self):
+        """Get current active project"""
+        if not self.config_file.exists():
+            return None
+            
+        with open(self.config_file, 'r') as f:
+            config = json.load(f)
+            
+        # Find active project in current directory
+        current_dir = Path.cwd()
+        for name, project in config.get("projects", {}).items():
+            project_path = Path(project["path"])
+            if current_dir == project_path or current_dir.is_relative_to(project_path):
+                return {"name": name, **project}
+                
+        return None
+        
+    def list_projects(self):
+        """List all projects"""
+        if not self.config_file.exists():
+            print("❌ No projects found. Run 'aid-commander init' first")
+            return
+            
+        with open(self.config_file, 'r') as f:
+            config = json.load(f)
+            
+        projects = config.get("projects", {})
+        if not projects:
+            print("📂 No projects found")
+            return
+            
+        print("📂 AID Commander Projects:")
+        print("=" * 40)
+        for name, project in projects.items():
+            status = "🟢" if project.get("status") == "active" else "🔴"
+            print(f"{status} {name}")
+            print(f"   Path: {project['path']}")
+            print(f"   Approach: {project['approach']}")
+            print(f"   Created: {project['created'][:10]}")
+            print()
+
+def main():
+    parser = argparse.ArgumentParser(description="AID Commander - AI-Facilitated Iterative Development")
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    
+    # Init command
+    subparsers.add_parser('init', help='Initialize AID Commander')
+    
+    # Start command
+    start_parser = subparsers.add_parser('start', help='Start a new project')
+    start_parser.add_argument('--project-name', required=True, help='Name of the project')
+    
+    # Task commands
+    task_parser = subparsers.add_parser('task', help='Task management')
+    task_subparsers = task_parser.add_subparsers(dest='task_action')
+    
+    add_task_parser = task_subparsers.add_parser('add', help='Add a new task')
+    add_task_parser.add_argument('description', help='Task description')
+    
+    # Review command
+    subparsers.add_parser('review', help='Review project tasks')
+    
+    # List command
+    subparsers.add_parser('list', help='List all projects')
+    
+    args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        return
+        
+    commander = AIDCommander()
+    
+    if args.command == 'init':
+        commander.init()
+    elif args.command == 'start':
+        commander.start_project(args.project_name)
+    elif args.command == 'task':
+        if args.task_action == 'add':
+            commander.add_task(args.description)
+        else:
+            print("❌ Unknown task action. Use 'add'")
+    elif args.command == 'review':
+        commander.review_tasks()
+    elif args.command == 'list':
+        commander.list_projects()
+    else:
+        print(f"❌ Unknown command: {args.command}")
+
+if __name__ == "__main__":
+    main()
