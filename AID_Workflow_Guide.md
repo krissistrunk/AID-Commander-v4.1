@@ -219,11 +219,64 @@ This accelerates the clarification process while maintaining quality control and
 - [ ] 8.0 Integrate Keyboard Controls
 ```
 
-#### 3.2. Prompt AI Builder for Sub-Task Generation
+#### 3.2. Framework-Aware Sub-Task Generation
+*   **Enhanced Process**: AI analyzes PRD Section 3.2 (Framework choices) before generating tasks
+*   **Framework-Specific Patterns**: AI incorporates best practices for chosen technology stack
 *   Iterative process: one parent task at a time ("Go 1.0", "Go 2.0", etc.)
-*   AI generates detailed sub-tasks for each parent task
-*   Facilitator reviews sub-tasks for clarity, completeness, and logical sequence
-*   Manual refinements made as needed
+*   AI generates detailed sub-tasks for each parent task with framework alignment
+*   Facilitator reviews sub-tasks for clarity, completeness, logical sequence, and framework consistency
+
+#### 3.2.1. Framework Integration Requirements
+Before generating sub-tasks, AI Builder must:
+
+1. **Analyze Architecture Decisions** from PRD Section 3.2
+2. **Apply Framework Best Practices** to task structure and implementation approach
+3. **Suggest Optimal File Organization** based on chosen frameworks
+4. **Identify Framework Dependencies** and setup requirements
+5. **Propose Testing Strategy** aligned with framework standards
+
+**Example Framework-Aware Task Generation (React + TypeScript):**
+```
+## Parent Task 2.0: Implement Game Board Component
+
+Sub-tasks adjusted for React + TypeScript:
+- [ ] 2.1 Create TypeScript interfaces for GameBoard state and props
+- [ ] 2.2 Implement GameBoard React component with proper typing
+- [ ] 2.3 Add React Testing Library tests for GameBoard component
+- [ ] 2.4 Implement custom hooks for board state management
+- [ ] 2.5 Add Storybook documentation for GameBoard component
+
+Framework Impact:
+- File structure follows React conventions (/src/components/, /src/hooks/)
+- TypeScript interfaces ensure type safety across component tree
+- Testing approach uses React Testing Library instead of vanilla DOM testing
+- State management leverages React hooks pattern
+```
+
+**Example Framework-Aware Task Generation (Vanilla JavaScript):**
+```
+## Parent Task 2.0: Implement Game Board Logic
+
+Sub-tasks optimized for Vanilla JS:
+- [ ] 2.1 Create GameBoard class with clear constructor and methods
+- [ ] 2.2 Implement board state management with plain JavaScript
+- [ ] 2.3 Add Jest unit tests for GameBoard class methods
+- [ ] 2.4 Create DOM manipulation utilities for board rendering
+- [ ] 2.5 Implement event handling for board interactions
+
+Framework Impact:
+- Object-oriented class structure for maintainability
+- Direct DOM manipulation without framework overhead
+- Simpler testing approach with Jest and jsdom
+- Manual state management patterns
+```
+
+#### 3.2.2. Framework Consistency Validation
+*   AI validates that all sub-tasks follow chosen framework patterns
+*   File structure aligns with framework conventions
+*   Testing approach matches framework standards
+*   Integration points work seamlessly with technology stack
+*   Manual refinements made as needed with framework considerations
 
 ### Step 4: Iterative Sub-Task Implementation & Verification
 

@@ -242,6 +242,13 @@ Instead of waiting for you to answer every question, the AI provides intelligent
 - **Expert guidance** - Benefit from AI's knowledge of industry standards
 - **Reduced back-and-forth** - Get moving quickly while maintaining control
 
+### 🤖 **AI Framework Advisory (NEW)**
+AI provides intelligent technology stack recommendations throughout the development process:
+- **Architecture Decisions** - AI suggests optimal frameworks based on your requirements
+- **Framework Compatibility** - Multi-component systems get compatibility analysis
+- **Implementation Patterns** - Tasks generated with framework-specific best practices
+- **Technology Harmonization** - Cross-component framework coordination for complex projects
+
 ### 🔒 **95% Confidence Protocol**
 AI must be 95% confident before implementing anything:
 - **No guessing** - AI asks for clarification when unsure

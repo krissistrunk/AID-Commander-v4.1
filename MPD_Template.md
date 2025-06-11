@@ -88,6 +88,71 @@ COMP-003 → COMP-001 (provides services to)
 * **Communication Patterns:** [e.g., REST APIs, Event bus, Message queues]
 * **Data Architecture:** [e.g., Shared databases, data synchronization strategies]
 
+### 2.4 AI-Assisted Framework Harmonization
+
+**🤖 Multi-Component Framework Advisory Enabled**
+
+When defining your program architecture, the AI Builder will provide cross-component framework analysis to ensure optimal integration and minimal complexity.
+
+#### Framework Compatibility Analysis
+The AI will evaluate framework choices across all components for:
+
+1. **Cross-Component Compatibility**
+   - API compatibility between different framework choices
+   - Data serialization/deserialization consistency
+   - Authentication and session management alignment
+   - Error handling and logging standardization
+
+2. **Operational Efficiency**
+   - Deployment pipeline compatibility
+   - Monitoring and observability tool alignment
+   - Development environment consistency
+   - Build and testing tool harmonization
+
+3. **Team Productivity**
+   - Shared library and utility reuse opportunities
+   - Common patterns and conventions across components
+   - Knowledge transfer and skill overlap optimization
+   - Documentation and maintenance standardization
+
+#### AI Framework Harmonization Protocol
+```
+🤖 Multi-Component Framework Analysis
+
+📊 Component Framework Matrix:
+- COMP-001 (Frontend): React + TypeScript
+- COMP-002 (Backend): Node.js + Express
+- COMP-003 (Analytics): Python + FastAPI
+
+🧠 Compatibility Assessment:
+- Technical: All components support JSON APIs, TypeScript types can be shared
+- Integration: React can consume both Express and FastAPI endpoints seamlessly
+- Operations: All frameworks support Docker containerization and standard monitoring
+- Development: Team can leverage shared TypeScript types across frontend/backend
+
+🔄 Optimization Recommendations:
+- Shared Package: Create shared TypeScript type definitions package
+- API Standard: Implement OpenAPI specification for consistent API documentation
+- Testing: Use common testing patterns (Jest for JS components, pytest for Python)
+
+📋 Integration Simplifications:
+- Reduces integration testing complexity by 40%
+- Enables shared authentication middleware approach
+- Allows unified error handling and logging format
+
+⚠️ Potential Conflicts Identified:
+- COMP-003 Python component requires additional CORS configuration
+- Different deployment strategies may require container orchestration planning
+
+Does this framework harmony approach align with your program goals?
+```
+
+#### Framework Selection Criteria for Multi-Component Programs
+- **Consistency Over Optimization**: Prefer consistent patterns across components unless performance critical
+- **Integration Simplicity**: Choose frameworks that integrate well with minimal custom bridging
+- **Operational Alignment**: Ensure frameworks support unified deployment, monitoring, and maintenance
+- **Team Capability**: Balance framework diversity with team expertise and learning curve
+
 ## 3. Cross-Component Integration Strategy
 
 ### 3.1 Integration Points

@@ -112,12 +112,63 @@ Does this work, or would you prefer a different metric?"
 - Wait for clarification and incorporate their feedback
 - Confirm understanding before proceeding with updated recommendation
 
+## Framework Suggestion Protocol
+
+When completing Section 3.2 (Core Technology Stack) in the PRD Template, follow this enhanced protocol:
+
+### Framework Advisory Requirements:
+1. **Analyze project constraints** from Sections 1-2 (goals, users, workflows)
+2. **Consider team context** (skill level, timeline, complexity)
+3. **Evaluate technical requirements** (performance, scalability, integrations)
+4. **Apply 95%+ confidence threshold** to all framework recommendations
+
+### Framework Suggestion Format:
+For each technology layer, provide:
+
+```
+🤖 AI Framework Recommendation: [Specific Framework]
+📊 Confidence Level: [XX]% confident
+
+🧠 Reasoning:
+- Technical considerations: [Performance, scalability, learning curve specifics]
+- Best practices: [Industry standards, proven patterns for this use case]  
+- Project context: [How it fits user requirements, team skills, timeline]
+- Risk mitigation: [Community support, maintenance, future-proofing]
+
+🔄 Alternative Options:
+- Option 2: [Framework] - [Key trade-off vs recommendation]
+- Option 3: [Framework] - [Key trade-off vs recommendation]
+
+📋 Implementation Impact:
+- Setup time: [Estimated hours]
+- Development complexity: [Impact on task generation]
+- Testing strategy: [Framework-specific testing approach]
+
+Does this framework choice align with your goals, or would you prefer exploring alternatives?
+```
+
+### Technology Stack Areas Requiring AI Analysis:
+- **Frontend Framework** (React, Vue, Angular, Vanilla JS)
+- **Backend Technology** (Node.js, Python, .NET, Go, etc.)
+- **Database Choice** (PostgreSQL, MongoDB, Redis, etc.)
+- **State Management** (Redux, Context, Zustand, Pinia, etc.)
+- **Testing Framework** (Jest, Vitest, Cypress, Playwright)
+- **Build/Deploy Tools** (Vite, Webpack, Docker, Vercel, etc.)
+
+### Framework Selection Quality Gates:
+- Each recommendation must include specific technical reasoning
+- All alternatives must be considered with trade-off analysis
+- Implementation impact on subsequent tasks must be quantified
+- Human approval required before proceeding to task generation
+
 ## Task Quality Gates
 
 After generating tasks:
 - Verify each has clear acceptance criteria
 - Ensure dependencies are explicit
 - Confirm file creation/modification paths are specified
+- **Validate framework-specific implementation patterns**
+- **Check framework compatibility across all tasks**
 - Test AI Builder understanding with sample task
 
 ## Initial Prompt
