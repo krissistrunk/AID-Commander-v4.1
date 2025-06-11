@@ -1,10 +1,22 @@
-# AI-Facilitated Iterative Development (AID) Workflow
+# AID Commander
 
-> Transform your software development process with AI as your implementation partner while maintaining human strategic control.
+> A terminal-based tool that implements the AI-Facilitated Iterative Development (AID) Workflow to transform your software development process with AI as your implementation partner.
 
-## What is AID Workflow?
+## What is AID Commander?
 
-The **AI-Facilitated Iterative Development (AID) Workflow** is a systematic methodology that positions an advanced AI Builder as your primary code implementer, while you (the human) provide strategic direction, detailed requirements, and quality oversight. Think of it as having an expert developer who can code 24/7, but needs clear instructions and regular check-ins.
+**AID Commander** is a command-line interface tool that automates the **AI-Facilitated Iterative Development (AID) Workflow**. Instead of manually managing AI interactions and task tracking, AID Commander provides a structured terminal environment that:
+
+- **Orchestrates AI interactions** following the proven AID methodology
+- **Manages task dependencies** and progress tracking automatically  
+- **Enforces quality gates** with human approval checkpoints
+- **Coordinates multi-component development** for complex projects
+- **Maintains documentation** and audit trails throughout development
+
+Think of AID Commander as your project management assistant that ensures the AI Builder follows best practices while keeping you in strategic control.
+
+## What is the AID Workflow?
+
+The underlying **AI-Facilitated Iterative Development (AID) Workflow** is a systematic methodology that positions an advanced AI Builder as your primary code implementer, while you (the human) provide strategic direction, detailed requirements, and quality oversight. AID Commander implements this workflow through an intuitive terminal interface.
 
 ## What You Get at the End
 
@@ -136,7 +148,15 @@ The AI Builder is your **implementation partner**. It handles:
 You Define → AI Suggests → You Approve → AI Implements → You Review → Repeat
 ```
 
-**Example Interaction:**
+**Example Interaction with AID Commander:**
+1. **You:** Run `aid-commander task add "user authentication"`
+2. **AID Commander:** Presents authentication options with AI recommendations
+3. **You:** Select JWT authentication from the provided options
+4. **AID Commander:** AI implements JWT system, shows progress in terminal
+5. **You:** Review code through `aid-commander review`, approve or request changes
+6. **AID Commander:** Marks task complete, automatically moves to next dependency
+
+**Example Manual Interaction:**
 1. **You:** "I need user authentication for my web app"
 2. **AI:** "I need clarification on authentication method. My suggestion: JWT tokens for stateless authentication - easier to scale and secure. Does this work, or would you prefer session-based authentication?"
 3. **You:** "JWT sounds good, proceed"
@@ -270,7 +290,18 @@ Every task has clear status and dependencies:
 
 ## Getting Started
 
-### 🚀 **Quick Start Guide**
+### 🚀 **Quick Start with AID Commander**
+
+1. **Install AID Commander** (installation instructions coming soon)
+2. **Run initial setup**: `aid-commander init`
+3. **Complete** the Project Complexity Assessment above to choose your approach
+4. **Start your project**: `aid-commander start --project-name YourProject`
+
+AID Commander will guide you through the entire process automatically!
+
+### 📚 **Manual Setup (Without AID Commander)**
+
+If you prefer to follow the workflow manually:
 
 1. **Complete** the Project Complexity Assessment above to choose your approach
 2. **Read** `AID_Workflow_Guide.md` - Understand the complete methodology
