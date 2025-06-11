@@ -1,0 +1,39 @@
+# MANIFEST.in for AID Commander
+# Include additional files in the package distribution
+
+include README.md
+include USER_GUIDE.md
+include SETUP.md
+include LICENSE
+include CHANGELOG.md
+
+# Include template files
+include *.md
+include AID_*.md
+include MPD_*.md
+include Integration_*.md
+
+# Include configuration files
+include *.json
+include *.yaml
+include *.yml
+
+# Include test files
+recursive-include tests *.py
+include test_*.py
+
+# Exclude unnecessary files
+exclude *.pyc
+exclude *.pyo
+exclude __pycache__
+exclude .git*
+exclude .DS_Store
+exclude *.log
+
+# Exclude temporary and build files
+exclude build/*
+exclude dist/*
+exclude *.egg-info/*
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__

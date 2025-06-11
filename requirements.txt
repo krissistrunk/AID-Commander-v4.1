@@ -1,0 +1,15 @@
+# AID Commander Requirements
+# Core dependencies for AID Commander functionality
+
+# AI Features (optional but recommended)
+aiohttp>=3.8.0  # For AI provider API communication
+
+# Development dependencies (optional)
+# pytest>=6.0
+# pytest-asyncio>=0.18.0
+# black>=22.0
+# flake8>=4.0
+
+# Note: Core AID Commander works without any dependencies
+# Install AI features with: pip install "aid-commander[ai]"
+# Install all features with: pip install "aid-commander[all]"

@@ -17,6 +17,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any
 from template_engine import TemplateEngine
+from ai_service import AIService, OperationMode, should_use_ai, format_ai_suggestion
+from logger import get_logger, get_error_handler, handle_errors
 
 class AIDCommander:
     def __init__(self):
@@ -25,85 +27,102 @@ class AIDCommander:
         self.current_project = None
         self.project_dir = None
         self.template_engine = TemplateEngine()
+        self.ai_service = AIService()
+        self.logger = get_logger()
+        self.error_handler = get_error_handler()
         
+    @handle_errors("initialization")
     def init(self):
         """Initialize AID Commander"""
-        print("🚀 Initializing AID Commander...")
+        self.logger.project_activity("Initializing AID Commander...")
         
-        # Create config directory
-        self.config_dir.mkdir(exist_ok=True)
-        
-        # Create default config
-        config = {
-            "version": "1.0",
-            "created": datetime.now().isoformat(),
-            "projects": {},
-            "settings": {
-                "confidence_threshold": 95,
-                "default_approach": "single_prd"
-            }
-        }
-        
-        with open(self.config_file, 'w') as f:
-            json.dump(config, f, indent=2)
+        try:
+            # Create config directory
+            self.config_dir.mkdir(exist_ok=True)
+            self.logger.debug(f"Created config directory: {self.config_dir}")
             
-        print("✅ AID Commander initialized successfully!")
-        print(f"   Config saved to: {self.config_file}")
-        print("\n📖 Next steps:")
-        print("   1. Run: aid-commander start --project-name YourProject")
-        print("   2. Follow the interactive setup process")
+            # Create default config
+            config = {
+                "version": "2.0",
+                "created": datetime.now().isoformat(),
+                "projects": {},
+                "settings": {
+                    "confidence_threshold": 95,
+                    "default_approach": "single_prd",
+                    "operation_mode": "manual"
+                }
+            }
+            
+            with open(self.config_file, 'w') as f:
+                json.dump(config, f, indent=2)
+                
+            self.logger.success("AID Commander initialized successfully!")
+            print(f"   Config saved to: {self.config_file}")
+            print("\n📖 Next steps:")
+            print("   1. Run: aid-commander start --project-name YourProject")
+            print("   2. Follow the interactive setup process")
+            
+        except Exception as e:
+            error_msg = self.error_handler.handle_config_error("initialization", e)
+            print(error_msg)
+            return False
         
     def start_project(self, project_name: str):
         """Start a new AID project"""
-        print(f"🎯 Starting new AID project: {project_name}")
+        self.logger.project_activity(f"Starting new AID project: {project_name}")
         
-        # Create project directory
-        project_dir = Path.cwd() / project_name
-        project_dir.mkdir(exist_ok=True)
-        
-        # Project complexity assessment
-        print("\n📊 Project Complexity Assessment")
-        print("Answer these questions to choose the right approach:")
-        
-        questions = [
-            "Will your project have more than 5-7 major features?",
-            "Do you need multiple developers working simultaneously?", 
-            "Are there distinct modules for independent development?",
-            "Will different parts use different technologies?",
-            "Complex integration with multiple external systems?"
-        ]
-        
-        yes_count = 0
-        for i, question in enumerate(questions, 1):
-            answer = input(f"{i}. {question} (y/n): ").lower().strip()
-            if answer.startswith('y'):
-                yes_count += 1
-                
-        # Determine approach
-        if yes_count >= 3:
-            approach = "multi_component"
-            print(f"\n📈 Recommendation: Multi-Component Approach ({yes_count}/5 complex indicators)")
-        else:
-            approach = "single_prd"  
-            print(f"\n📉 Recommendation: Single PRD Approach ({yes_count}/5 complex indicators)")
+        try:
+            # Create project directory
+            project_dir = Path.cwd() / project_name
+            project_dir.mkdir(exist_ok=True)
             
-        # Create project structure
-        self._create_project_structure(project_dir, approach, project_name)
+            # Project complexity assessment
+            print("\n📊 Project Complexity Assessment")
+            print("Answer these questions to choose the right approach:")
+            
+            questions = [
+                "Will your project have more than 5-7 major features?",
+                "Do you need multiple developers working simultaneously?", 
+                "Are there distinct modules for independent development?",
+                "Will different parts use different technologies?",
+                "Complex integration with multiple external systems?"
+            ]
+            
+            yes_count = 0
+            for i, question in enumerate(questions, 1):
+                answer = input(f"{i}. {question} (y/n): ").lower().strip()
+                if answer.startswith('y'):
+                    yes_count += 1
+                    
+            # Determine approach
+            if yes_count >= 3:
+                approach = "multi_component"
+                print(f"\n📈 Recommendation: Multi-Component Approach ({yes_count}/5 complex indicators)")
+            else:
+                approach = "single_prd"  
+                print(f"\n📉 Recommendation: Single PRD Approach ({yes_count}/5 complex indicators)")
+                
+            # Create project structure
+            self._create_project_structure(project_dir, approach, project_name)
+            
+            # Update config
+            self._update_project_config(project_name, project_dir, approach)
         
-        # Update config
-        self._update_project_config(project_name, project_dir, approach)
-        
-        print(f"\n🎉 Project {project_name} created successfully!")
-        print(f"📁 Location: {project_dir}")
-        print(f"🛠️ Approach: {approach}")
-        print(f"\n📖 Next steps:")
-        if approach == "single_prd":
-            print(f"   1. Edit {project_name}_PRD.md with your requirements")
-            print("   2. Run: aid-commander task generate")
-        else:
-            print(f"   1. Edit {project_name}_MPD.md to coordinate components") 
-            print("   2. Create component PRDs for each module")
-            print("   3. Run: aid-commander task generate")
+            print(f"\n🎉 Project {project_name} created successfully!")
+            print(f"📁 Location: {project_dir}")
+            print(f"🛠️ Approach: {approach}")
+            print(f"\n📖 Next steps:")
+            if approach == "single_prd":
+                print(f"   1. Edit {project_name}_PRD.md with your requirements")
+                print("   2. Run: aid-commander task generate")
+            else:
+                print(f"   1. Edit {project_name}_MPD.md to coordinate components") 
+                print("   2. Create component PRDs for each module")
+                print("   3. Run: aid-commander task generate")
+                
+        except Exception as e:
+            error_msg = self.error_handler.handle_file_error("project creation", Path.cwd() / project_name, e)
+            print(error_msg)
             
     def _create_project_structure(self, project_dir: Path, approach: str, project_name: str):
         """Create project files and directories using template engine"""
@@ -239,55 +258,78 @@ class AIDCommander:
             
     def add_task(self, task_description: str):
         """Add a new task to current project"""
-        current_project = self._get_current_project()
-        if not current_project:
-            print("❌ No active project. Run 'aid-commander start --project-name <name>' first")
-            return
+        try:
+            current_project = self._get_current_project()
+            if not current_project:
+                self.logger.warning("No active project found")
+                print("❌ No active project. Run 'aid-commander start --project-name <name>' first")
+                return
+                
+            self.logger.task_activity(f"Adding task: {task_description}")
             
-        print(f"📝 Adding task: {task_description}")
-        
-        # Manual mode - always ready (user manages complexity)
-        status = "[ ]"  # Ready
-        print(f"✅ Task ready for implementation (Manual Mode)")
+            # Check AI mode for task analysis
+            current_mode = self.ai_service.get_mode()
             
-        # Add to tasks file with enhanced format
-        project_name = current_project["name"]
-        tasks_file = Path(current_project["path"]) / f"{project_name}_Tasks.md"
-        
-        if tasks_file.exists():
-            content = tasks_file.read_text()
+            if should_use_ai(current_mode):
+                try:
+                    import asyncio
+                    # Get AI analysis of the task
+                    analysis = asyncio.run(self.ai_service.analyze_task(task_description, ""))
+                    status = "[ ]"  # Ready (AI analyzed)
+                    print(f"🤖 AI Analysis: {analysis.complexity} complexity, ~{analysis.estimated_effort}")
+                    if analysis.suggestions:
+                        print(f"💡 Suggestions: {', '.join(analysis.suggestions[:2])}")
+                except Exception as e:
+                    status = "[ ]"  # Ready (fallback)
+                    print(f"✅ Task ready for implementation (AI analysis unavailable: {e})")
+            else:
+                # Manual mode - always ready (user manages complexity)
+                status = "[ ]"  # Ready
+                print(f"✅ Task ready for implementation (Manual Mode)")
             
-            # Find the "Manual Tasks" section
-            if "### Manual Tasks" in content:
-                # Insert after the manual tasks header
-                lines = content.split('\n')
-                insert_index = None
-                for i, line in enumerate(lines):
-                    if line.strip() == "### Manual Tasks":
-                        # Skip any existing description lines
-                        j = i + 1
-                        while j < len(lines) and (lines[j].startswith('*') or lines[j].strip() == ''):
-                            j += 1
-                        insert_index = j
-                        break
-                        
-                if insert_index is not None:
-                    new_task = f"{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
-                    lines.insert(insert_index, new_task)
-                    content = '\n'.join(lines)
+            # Add to tasks file with enhanced format
+            project_name = current_project["name"]
+            tasks_file = Path(current_project["path"]) / f"{project_name}_Tasks.md"
+            
+            if tasks_file.exists():
+                content = tasks_file.read_text()
+                
+                # Find the "Manual Tasks" section
+                if "### Manual Tasks" in content:
+                    # Insert after the manual tasks header
+                    lines = content.split('\n')
+                    insert_index = None
+                    for i, line in enumerate(lines):
+                        if line.strip() == "### Manual Tasks":
+                            # Skip any existing description lines
+                            j = i + 1
+                            while j < len(lines) and (lines[j].startswith('*') or lines[j].strip() == ''):
+                                j += 1
+                            insert_index = j
+                            break
+                            
+                    if insert_index is not None:
+                        new_task = f"{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
+                        lines.insert(insert_index, new_task)
+                        content = '\n'.join(lines)
+                    else:
+                        # Fallback: append to end
+                        new_task = f"\n{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
+                        content += new_task
                 else:
-                    # Fallback: append to end
+                    # No "Manual Tasks" section found, append to end
                     new_task = f"\n{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
                     content += new_task
             else:
-                # Fallback: append to end
-                new_task = f"\n{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
-                content += new_task
+                # Create basic content structure if file doesn't exist
+                content = f"# {project_name} Tasks\n\n### Manual Tasks\n\n{status} {task_description} (Added: {datetime.now().strftime('%Y-%m-%d %H:%M')})\n"
                 
             tasks_file.write_text(content)
-            print(f"✅ Task added to {tasks_file}")
-        else:
-            print(f"❌ Tasks file not found: {tasks_file}")
+            self.logger.success(f"Task added to {tasks_file}")
+            
+        except Exception as e:
+            error_msg = self.error_handler.handle_unexpected_error("add task", e)
+            print(error_msg)
             
     def generate_tasks(self):
         """Generate tasks from PRD/MPD templates"""
@@ -334,8 +376,30 @@ class AIDCommander:
                 print("\n📝 Proceeding with task generation")
                 pass
                 
-        # Extract tasks from template
-        tasks = self.template_engine.extract_tasks_from_prd(template_file)
+        # Extract tasks from template (with AI enhancement if available)
+        current_mode = self.ai_service.get_mode()
+        
+        if should_use_ai(current_mode):
+            try:
+                import asyncio
+                print("🤖 Generating AI-enhanced tasks...")
+                ai_response = asyncio.run(self.ai_service.generate_ai_tasks(template_file, template_type))
+                
+                if ai_response.confidence >= 70:  # Use AI tasks if confident
+                    print(f"✨ AI generated tasks (confidence: {ai_response.confidence:.0f}%)")
+                    # Parse AI response into task format
+                    tasks = self._parse_ai_tasks(ai_response.content)
+                else:
+                    print(f"⚠️  AI confidence low ({ai_response.confidence:.0f}%), using template extraction")
+                    tasks = self.template_engine.extract_tasks_from_prd(template_file)
+                    
+            except Exception as e:
+                print(f"⚠️  AI task generation failed: {e}")
+                print("📝 Falling back to template extraction")
+                tasks = self.template_engine.extract_tasks_from_prd(template_file)
+        else:
+            # Manual mode - use template engine
+            tasks = self.template_engine.extract_tasks_from_prd(template_file)
         
         if not tasks:
             print("❌ No tasks found in template")
@@ -619,8 +683,16 @@ class AIDCommander:
             print("❌ No projects found. Run 'aid-commander init' first")
             return
             
-        with open(self.config_file, 'r') as f:
-            config = json.load(f)
+        try:
+            with open(self.config_file, 'r') as f:
+                config = json.load(f)
+        except json.JSONDecodeError:
+            print("❌ Configuration file corrupted. Run 'aid-commander init' to reset")
+            return
+        except Exception as e:
+            error_msg = self.error_handler.handle_file_error("list projects", self.config_file, e)
+            print(error_msg)
+            return
             
         projects = config.get("projects", {})
         if not projects:
@@ -636,6 +708,100 @@ class AIDCommander:
             print(f"   Approach: {project['approach']}")
             print(f"   Created: {project['created'][:10]}")
             print()
+            
+    def set_mode(self, mode: str):
+        """Set operation mode (manual/automated/hybrid)"""
+        valid_modes = ["manual", "automated", "hybrid"]
+        if mode not in valid_modes:
+            print(f"❌ Invalid mode: {mode}")
+            print(f"   Valid modes: {', '.join(valid_modes)}")
+            return
+            
+        # Update AI service mode
+        try:
+            ai_mode = OperationMode(mode)
+            self.ai_service.set_mode(ai_mode)
+            
+            # Update main config
+            if self.config_file.exists():
+                with open(self.config_file, 'r') as f:
+                    config = json.load(f)
+            else:
+                config = {"settings": {}}
+                
+            config.setdefault("settings", {})["operation_mode"] = mode
+            
+            with open(self.config_file, 'w') as f:
+                json.dump(config, f, indent=2)
+                
+            print(f"✅ Operation mode set to: {mode}")
+            
+            if mode == "automated":
+                print("🤖 Automated mode: AI will generate and manage tasks")
+            elif mode == "hybrid":
+                print("🤝 Hybrid mode: AI suggestions with user approval")
+            else:
+                print("👤 Manual mode: User-driven task management")
+                
+        except Exception as e:
+            print(f"❌ Error setting mode: {e}")
+            
+    def get_status(self):
+        """Get AID Commander and AI service status"""
+        print("📊 AID Commander Status")
+        print("=" * 40)
+        
+        # Main config status
+        if self.config_file.exists():
+            with open(self.config_file, 'r') as f:
+                config = json.load(f)
+            print(f"Version: {config.get('version', 'Unknown')}")
+            print(f"Operation Mode: {config.get('settings', {}).get('operation_mode', 'manual')}")
+        else:
+            print("Status: Not initialized")
+            
+        # Current project
+        current_project = self._get_current_project()
+        if current_project:
+            print(f"Current Project: {current_project['name']}")
+            print(f"Project Path: {current_project['path']}")
+        else:
+            print("Current Project: None")
+            
+        # AI Service status
+        ai_status = self.ai_service.get_status()
+        print(f"\n🤖 AI Service Status")
+        print(f"AI Mode: {ai_status['mode']}")
+        print(f"AI Provider: {ai_status['provider']}")
+        print(f"Confidence Threshold: {ai_status['confidence_threshold']}%")
+        
+    def _parse_ai_tasks(self, ai_content: str) -> List[Dict[str, str]]:
+        """Parse AI-generated task content into task format"""
+        tasks = []
+        lines = ai_content.split('\n')
+        
+        for line in lines:
+            line = line.strip()
+            # Look for numbered items, bullet points, or task-like patterns
+            if (line.startswith(('1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.')) or
+                line.startswith(('- ', '* ', '• ')) or
+                line.startswith('Task:')):
+                
+                # Clean up the line
+                description = line
+                for prefix in ['1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.', '- ', '* ', '• ', 'Task:']:
+                    if description.startswith(prefix):
+                        description = description[len(prefix):].strip()
+                        break
+                        
+                if description and len(description) > 5:  # Filter out too short descriptions
+                    tasks.append({
+                        'description': description,
+                        'status': '[ ]',  # Ready
+                        'section': 'AI Generated'
+                    })
+                    
+        return tasks
 
 def main():
     parser = argparse.ArgumentParser(description="AID Commander - AI-Facilitated Iterative Development")
@@ -676,6 +842,17 @@ def main():
     # List command
     subparsers.add_parser('list', help='List all projects')
     
+    # Mode command
+    mode_parser = subparsers.add_parser('mode', help='Set operation mode')
+    mode_parser.add_argument('operation_mode', choices=['manual', 'automated', 'hybrid'], 
+                           help='Operation mode to set')
+    
+    # Status command
+    subparsers.add_parser('status', help='Show AID Commander status')
+    
+    # Setup command
+    subparsers.add_parser('setup', help='Run AI setup wizard')
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -708,6 +885,14 @@ def main():
         commander.review_tasks()
     elif args.command == 'list':
         commander.list_projects()
+    elif args.command == 'mode':
+        commander.set_mode(args.operation_mode)
+    elif args.command == 'status':
+        commander.get_status()
+    elif args.command == 'setup':
+        from ai_setup_wizard import AISetupWizard
+        wizard = AISetupWizard()
+        wizard.run()
     else:
         print(f"❌ Unknown command: {args.command}")
 

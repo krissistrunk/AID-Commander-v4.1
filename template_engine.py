@@ -85,6 +85,8 @@ class TemplateEngine:
             '[Date Created]': datetime.now().strftime('%Y-%m-%d'),
             '[Date]': datetime.now().strftime('%Y-%m-%d'),
             '[Program Owner Name]': user_input.get('program_owner', 'Program Owner'),
+            '[Program Owner]': user_input.get('program_owner', 'Program Owner'),
+            '[Product Owner Name(s)]': user_input.get('program_owner', 'Program Owner'),
             '[Author]': user_input.get('author', 'AID Commander User'),
         }
         
@@ -210,7 +212,7 @@ class TemplateEngine:
                 section_match = re.search(section_pattern, content, re.DOTALL)
                 if section_match:
                     section_content = section_match.group(1).strip()
-                    if len(section_content) < 50:  # Arbitrary minimum content length
+                    if len(section_content) < 20:  # More lenient minimum content length
                         issues.append(f"Section '{required_section}' needs more content")
                         
         is_complete = len(issues) == 0
@@ -223,6 +225,7 @@ class TemplateEngine:
         
         # Look for task-related sections
         task_patterns = [
+            r'(\d+)\.\s+(.+)',           # Numbered lists like "1. Task description"
             r'(\d+\.\d+\.?\d*)\s+(.+)',  # Numbered items like "5.1.1 Task description"
             r'-\s*(.+)',                 # Bullet points
             r'\*\s*(.+)',                # Asterisk bullets

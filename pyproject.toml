@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aid-commander"
+version = "2.0.0"
+description = "AI-Facilitated Iterative Development - Terminal Tool"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "AID Development Team", email = "aid@sistronics.com"}
+]
+maintainers = [
+    {name = "AID Development Team", email = "aid@sistronics.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License", 
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = [
+    "ai", "development", "project-management", "cli", "automation", 
+    "templates", "task-management", "iterative-development"
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+ai = [
+    "aiohttp>=3.8.0",
+]
+dev = [
+    "pytest>=6.0",
+    "pytest-asyncio>=0.18.0", 
+    "black>=22.0",
+    "flake8>=4.0",
+]
+all = [
+    "aiohttp>=3.8.0",
+    "pytest>=6.0",
+    "pytest-asyncio>=0.18.0",
+    "black>=22.0", 
+    "flake8>=4.0",
+]
+
+[project.scripts]
+aid-commander = "aid_commander:main"
+
+[project.urls]
+Homepage = "https://github.com/sistronics/aid-commander"
+Repository = "https://github.com/sistronics/aid-commander"
+Documentation = "https://github.com/sistronics/aid-commander/blob/main/USER_GUIDE.md"
+"Bug Reports" = "https://github.com/sistronics/aid-commander/issues"
+
+[tool.setuptools]
+py-modules = [
+    "aid_commander",
+    "template_engine",
+    "ai_service", 
+    "logger",
+    "ai_setup_wizard"
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.txt", "*.json"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
