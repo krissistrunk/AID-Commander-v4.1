@@ -1,0 +1,230 @@
+{
+  "passed": [
+    {
+      "test": "Project Structure",
+      "status": "PASS",
+      "details": "All required files present",
+      "error": ""
+    },
+    {
+      "test": "Import aid_commander_v41",
+      "status": "PASS",
+      "details": "Main package import",
+      "error": ""
+    },
+    {
+      "test": "Import pydantic",
+      "status": "PASS",
+      "details": "Pydantic dependency",
+      "error": ""
+    },
+    {
+      "test": "Import click",
+      "status": "PASS",
+      "details": "CLI framework",
+      "error": ""
+    },
+    {
+      "test": "Import rich",
+      "status": "PASS",
+      "details": "Rich terminal library",
+      "error": ""
+    },
+    {
+      "test": "Import structlog",
+      "status": "PASS",
+      "details": "Structured logging",
+      "error": ""
+    },
+    {
+      "test": "Import asyncio",
+      "status": "PASS",
+      "details": "Async support",
+      "error": ""
+    },
+    {
+      "test": "PyProject TOML",
+      "status": "PASS",
+      "details": "Configuration file is valid",
+      "error": ""
+    },
+    {
+      "test": "Dependencies Listed",
+      "status": "PASS",
+      "details": "Found 25 dependencies",
+      "error": ""
+    },
+    {
+      "test": "Docker Compose File",
+      "status": "PASS",
+      "details": "docker-compose.yml found",
+      "error": ""
+    },
+    {
+      "test": "CLI Import",
+      "status": "PASS",
+      "details": "Successfully imported CLI components",
+      "error": ""
+    },
+    {
+      "test": "CLI Object Creation",
+      "status": "PASS",
+      "details": "AIDCommanderV41 object created",
+      "error": ""
+    },
+    {
+      "test": "CLI Configuration",
+      "status": "PASS",
+      "details": "Loaded config with 7 settings",
+      "error": ""
+    },
+    {
+      "test": "Graphiti Import",
+      "status": "PASS",
+      "details": "AIDGraphitiEngine imported successfully",
+      "error": ""
+    },
+    {
+      "test": "RAG Import",
+      "status": "PASS",
+      "details": "HybridRAGSystem imported successfully",
+      "error": ""
+    },
+    {
+      "test": "Pydantic AI Builder Import",
+      "status": "PASS",
+      "details": "PydanticAIKnowledgeBuilder imported successfully",
+      "error": ""
+    },
+    {
+      "test": "Multi-Layer Validation Import",
+      "status": "PASS",
+      "details": "MultiLayerValidationEngine imported",
+      "error": ""
+    },
+    {
+      "test": "Hallucination Detection Import",
+      "status": "PASS",
+      "details": "HallucinationDetectionEngine imported",
+      "error": ""
+    },
+    {
+      "test": "Enhanced Memory Import",
+      "status": "PASS",
+      "details": "GraphEnhancedMemoryBank imported",
+      "error": ""
+    },
+    {
+      "test": "V4.0 Memory Import",
+      "status": "PASS",
+      "details": "V4.0 MemoryBank imported",
+      "error": ""
+    },
+    {
+      "test": "Dependency neo4j",
+      "status": "PASS",
+      "details": "Neo4j driver for graph database",
+      "error": ""
+    },
+    {
+      "test": "Dependency chromadb",
+      "status": "PASS",
+      "details": "ChromaDB for vector storage",
+      "error": ""
+    },
+    {
+      "test": "Dependency sentence_transformers",
+      "status": "PASS",
+      "details": "Sentence transformers for embeddings",
+      "error": ""
+    },
+    {
+      "test": "Dependency httpx",
+      "status": "PASS",
+      "details": "HTTP client for API calls",
+      "error": ""
+    },
+    {
+      "test": "Dependency bs4",
+      "status": "PASS",
+      "details": "BeautifulSoup for web scraping",
+      "error": ""
+    },
+    {
+      "test": "Dependency pytest",
+      "status": "PASS",
+      "details": "Testing framework",
+      "error": ""
+    },
+    {
+      "test": "Dependency pytest_asyncio",
+      "status": "PASS",
+      "details": "Async testing support",
+      "error": ""
+    },
+    {
+      "test": "Graphiti Engine Creation",
+      "status": "PASS",
+      "details": "AIDGraphitiEngine instantiated",
+      "error": ""
+    },
+    {
+      "test": "RAG System Creation",
+      "status": "PASS",
+      "details": "HybridRAGSystem instantiated",
+      "error": ""
+    },
+    {
+      "test": "File Content aid_commander_v41/knowledge_graph/graphiti/temporal_engine.py",
+      "status": "PASS",
+      "details": "File has 23953 characters",
+      "error": ""
+    },
+    {
+      "test": "File Content aid_commander_v41/knowledge_graph/rag/hybrid_search.py",
+      "status": "PASS",
+      "details": "File has 29842 characters",
+      "error": ""
+    },
+    {
+      "test": "File Content aid_commander_v41/validation/multi_layer/validation_engine.py",
+      "status": "PASS",
+      "details": "File has 39765 characters",
+      "error": ""
+    },
+    {
+      "test": "File Content aid_commander_v41/validation/hallucination/detection_engine.py",
+      "status": "PASS",
+      "details": "File has 30089 characters",
+      "error": ""
+    },
+    {
+      "test": "File Content aid_commander_v41/cli/main.py",
+      "status": "PASS",
+      "details": "File has 28801 characters",
+      "error": ""
+    }
+  ],
+  "failed": [
+    {
+      "test": "Docker Available",
+      "status": "FAIL",
+      "details": "Docker command not found",
+      "error": ""
+    }
+  ],
+  "issues": [
+    {
+      "component": "Infrastructure",
+      "issue": "Docker not installed",
+      "fix_suggestion": "Install Docker Desktop"
+    }
+  ],
+  "fixes_needed": [
+    {
+      "component": "Docker Available",
+      "issue": "Docker command not found",
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aid-commander-v41"
+version = "4.1.0"
+description = "Knowledge Graph-Enhanced AI Development Orchestrator with 92%+ Success Certainty"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "AID Commander Team", email = "team@aid-commander.dev"}
+]
+keywords = [
+    "ai", "development", "orchestrator", "knowledge-graph", 
+    "neo4j", "graphiti", "hallucination-detection", "pydantic-ai"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = [
+    # Core dependencies from v4.0
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "cryptography>=41.0.0",
+    "aiofiles>=23.0.0",
+    "asyncio-mqtt>=0.13.0",
+    
+    # Knowledge Graph dependencies (NEW)
+    "neo4j>=5.15.0",
+    "graphiti-core>=0.1.0",
+    "py2neo>=2021.2.4",
+    
+    # Enhanced AI dependencies
+    "pydantic-ai>=0.0.1",
+    "openai>=1.12.0",
+    "anthropic>=0.18.0",
+    
+    # RAG System dependencies
+    "chromadb>=0.4.0",
+    "sentence-transformers>=2.2.0",
+    "langchain>=0.1.0",
+    "faiss-cpu>=1.7.0",
+    
+    # Performance and caching
+    "redis>=5.0.0",
+    "celery>=5.3.0",
+    
+    # Database enhancements
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    
+    # Async and networking
+    "aiohttp>=3.9.0",
+    "httpx>=0.26.0",
+    
+    # Monitoring and telemetry
+    "prometheus-client>=0.19.0",
+    "structlog>=23.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+enterprise = [
+    "elasticsearch>=8.11.0",
+    "kafka-python>=2.0.2",
+    "celery[redis]>=5.3.0",
+    "prometheus-client>=0.19.0",
+]
+ml = [
+    "torch>=2.1.0",
+    "transformers>=4.36.0",
+    "scikit-learn>=1.3.0",
+    "numpy>=1.24.0",
+]
+all = [
+    "aid-commander-v41[dev,enterprise,ml]"
+]
+
+[project.urls]
+Homepage = "https://github.com/krissistrunk/AID-Commander-v4.1"
+Documentation = "https://aid-commander-v41.readthedocs.io"
+Repository = "https://github.com/krissistrunk/AID-Commander-v4.1.git"
+Issues = "https://github.com/krissistrunk/AID-Commander-v4.1/issues"
+
+[project.scripts]
+aid-commander-v41 = "aid_commander_v41.cli:main"
+aid-kg = "aid_commander_v41.knowledge_graph.cli:main"
+aid-validate = "aid_commander_v41.validation.cli:main"
+aid-memory-kg = "aid_commander_v41.memory_enhanced.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["aid_commander_v41"]
+
+[tool.black]
+line-length = 88
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "knowledge_graph: marks tests related to knowledge graph functionality",
+    "hallucination: marks tests for hallucination detection",
+    "validation: marks validation system tests",
+]
+
+[tool.coverage.run]
+source = ["aid_commander_v41"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

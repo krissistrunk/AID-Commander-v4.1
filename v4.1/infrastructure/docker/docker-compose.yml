@@ -1,0 +1,193 @@
+version: '3.8'
+
+services:
+  # Neo4j Graph Database for structural validation
+  neo4j:
+    image: neo4j:5.15-enterprise
+    container_name: aid-commander-neo4j
+    ports:
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    environment:
+      NEO4J_AUTH: neo4j/aid-commander-v41-secure
+      NEO4J_PLUGINS: '["apoc", "graph-data-science", "n10s"]'
+      NEO4J_apoc_export_file_enabled: 'true'
+      NEO4J_apoc_import_file_enabled: 'true'
+      NEO4J_apoc_import_file_use__neo4j__config: 'true'
+      NEO4J_ACCEPT_LICENSE_AGREEMENT: 'yes'
+      NEO4J_dbms_security_procedures_unrestricted: 'apoc.*,gds.*,n10s.*'
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+      - neo4j_plugins:/plugins
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p aid-commander-v41-secure 'RETURN 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: aid-commander-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass aid-commander-v41-redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+
+  # Elasticsearch for advanced RAG search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: aid-commander-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ChromaDB for vector embeddings
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: aid-commander-chromadb
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_PORT=8000
+    volumes:
+      - chromadb_data:/chroma/chroma
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL for enhanced memory bank
+  postgres:
+    image: postgres:16-alpine
+    container_name: aid-commander-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: aid_commander_v41
+      POSTGRES_USER: aid_commander
+      POSTGRES_PASSWORD: aid-commander-v41-db-secure
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aid_commander -d aid_commander_v41"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  # Grafana for monitoring and dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: aid-commander-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: aid-commander-v41-grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest    
+    container_name: aid-commander-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: aid-commander-jaeger
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    networks:
+      - aid-commander-network
+    restart: unless-stopped
+
+volumes:
+  neo4j_data:
+    driver: local
+  neo4j_logs:
+    driver: local
+  neo4j_import:
+    driver: local
+  neo4j_plugins:
+    driver: local
+  redis_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  chromadb_data:
+    driver: local
+  postgres_data:
+    driver: local
+  grafana_data:
+    driver: local
+  prometheus_data:
+    driver: local
+
+networks:
+  aid-commander-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
