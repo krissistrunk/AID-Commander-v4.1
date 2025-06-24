@@ -322,19 +322,18 @@ aid-kg framework-compatibility pydantic-ai fastapi
 
 ### 🎯 **Learning Guides**
 - **[🌟 Beginner Guide](docs/BEGINNER_GUIDE_V41.md)** - First steps with knowledge graph development
-- **[🚀 Intermediate Guide](docs/INTERMEDIATE_GUIDE_V41.md)** - Advanced validation and hallucination detection
-- **[⚡ Advanced Guide](docs/ADVANCED_GUIDE_V41.md)** - Enterprise knowledge graph optimization
+- **[🔍 Hallucination Detection Guide](docs/HALLUCINATION_DETECTION.md)** - Comprehensive hallucination prevention with 95%+ accuracy
+- **[🧠 Knowledge Graph Setup](docs/KNOWLEDGE_GRAPH_SETUP.md)** - Complete Neo4j, Graphiti, and RAG configuration
 
-### 🔧 **Integration & Setup**
-- **[🔍 Hallucination Detection Guide](docs/HALLUCINATION_DETECTION.md)** - Comprehensive hallucination prevention
-- **[🧠 Knowledge Graph Setup](docs/KNOWLEDGE_GRAPH_SETUP.md)** - Neo4j, Graphiti, and RAG configuration
-- **[🔧 Multi-Layer Validation](docs/MULTI_LAYER_VALIDATION.md)** - 6-layer validation system setup
+### 🔧 **Integration & Reference**
 - **[🤖 Enhanced Claude Code Integration](CLAUDE_V41.md)** - v4.1-specific Claude Code integration
+- **[💡 Practical Examples](examples/)** - Working code examples with validation confidence scores
+  - **[Validated Customer Support Agent](examples/pydantic_ai/validated_customer_support.py)** - 95% confidence Pydantic AI example
+  - **[Hallucination Detection Examples](examples/hallucination_detection/before_after_examples.py)** - Before/after correction examples
 
-### 📖 **Technical Reference**
-- **[🏗️ Architecture Deep Dive](docs/ARCHITECTURE_V41.md)** - Complete system architecture
-- **[🔌 API Reference](docs/API_REFERENCE_V41.md)** - Full API documentation
-- **[⚡ Performance Optimization](docs/PERFORMANCE_V41.md)** - Scaling and optimization
+### 📊 **Test Results & Validation**
+- **[🧪 Comprehensive Test Results](test_results.json)** - 97.1% test success rate documentation
+- **[🔧 Test Suite](test_comprehensive.py)** - Complete system validation framework
 
 ## 🧪 Testing
 
