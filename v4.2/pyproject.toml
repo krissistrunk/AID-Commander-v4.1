@@ -1,0 +1,326 @@
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aid-commander-genesis"
+version = "4.2.0"
+description = "The Ultimate Idea-to-Deployment AI Development Orchestrator - Fusion of ConceptCraft AI, Strategic Planning, and Knowledge Graph Intelligence"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "AID Commander Genesis Team", email = "team@aid-commander-genesis.dev"}
+]
+maintainers = [
+    {name = "AID Commander Genesis Team", email = "team@aid-commander-genesis.dev"}
+]
+keywords = [
+    "ai", "development", "orchestrator", "conceptcraft", "knowledge-graph", 
+    "story-driven", "adaptive-intelligence", "cross-project-learning",
+    "stakeholder-alignment", "idea-to-deployment", "genesis"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11", 
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Project Management",
+    "Topic :: Text Processing :: Linguistic",
+]
+requires-python = ">=3.10"
+
+dependencies = [
+    # Core framework dependencies
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "structlog>=23.2.0",
+    
+    # ConceptCraft AI dependencies
+    "openai>=1.12.0",
+    "anthropic>=0.18.0",
+    "tiktoken>=0.5.0",
+    "langchain>=0.1.0",
+    "langchain-community>=0.0.20",
+    
+    # Knowledge Graph System (from v4.1)
+    "neo4j>=5.15.0",
+    "graphiti-core>=0.1.0",
+    "py2neo>=2021.2.4",
+    "redis>=5.0.0",
+    
+    # Enhanced AI and RAG
+    "pydantic-ai>=0.0.1",
+    "chromadb>=0.4.0",
+    "sentence-transformers>=2.2.0",
+    "faiss-cpu>=1.7.0",
+    "numpy>=1.24.0",
+    
+    # Story Engine and Template System
+    "jinja2>=3.1.0",
+    "markdown>=3.5.0",
+    "pyyaml>=6.0.0",
+    "jsonschema>=4.20.0",
+    
+    # Adaptive Intelligence Engine
+    "scikit-learn>=1.3.0",
+    "pandas>=2.1.0",
+    "networkx>=3.2.0",
+    
+    # Database and Storage
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "aiosqlite>=0.19.0",
+    
+    # Async and Networking
+    "aiohttp>=3.9.0",
+    "httpx>=0.26.0",
+    "aiofiles>=23.0.0",
+    "websockets>=12.0.0",
+    
+    # Monitoring and Analytics
+    "prometheus-client>=0.19.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    
+    # Security and Validation
+    "cryptography>=41.0.0",
+    "passlib>=1.7.4",
+    "python-jose>=3.3.0",
+    
+    # Development and Testing Support
+    "typer>=0.9.0",
+    "questionary>=2.0.0",
+    "textual>=0.50.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+]
+
+enterprise = [
+    # Enterprise infrastructure
+    "elasticsearch>=8.11.0",
+    "kafka-python>=2.0.2",
+    "celery[redis]>=5.3.0",
+    "kubernetes>=28.1.0",
+    
+    # Enterprise security
+    "ldap3>=2.9.1",
+    "pyotp>=2.9.0",
+    "cryptography>=41.0.0",
+    
+    # Enterprise monitoring
+    "prometheus-client>=0.19.0",
+    "grafana-client>=3.5.0",
+    "jaeger-client>=4.8.0",
+    
+    # Enterprise compliance
+    "audit-logger>=2.1.0",
+    "compliance-tracker>=1.5.0",
+]
+
+creative = [
+    # Creative and innovation features
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "plotly>=5.17.0",
+    "wordcloud>=1.9.2",
+    "imageio>=2.31.0",
+    "pillow>=10.1.0",
+    
+    # Advanced NLP for creative insights
+    "spacy>=3.7.0",
+    "transformers>=4.36.0",
+    "torch>=2.1.0",
+]
+
+mobile = [
+    # Mobile development support
+    "kivy>=2.2.0",
+    "buildozer>=1.5.0",
+    "react-native-cli>=2.0.0",
+]
+
+web = [
+    # Web development integrations
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "streamlit>=1.28.0",
+    "dash>=2.15.0",
+    "flask>=3.0.0",
+]
+
+all = [
+    "aid-commander-genesis[dev,enterprise,creative,mobile,web]"
+]
+
+[project.urls]
+Homepage = "https://github.com/krissistrunk/AID-Commander-Genesis"
+Documentation = "https://aid-commander-genesis.readthedocs.io"
+Repository = "https://github.com/krissistrunk/AID-Commander-Genesis.git"
+Issues = "https://github.com/krissistrunk/AID-Commander-Genesis/issues"
+Discussions = "https://github.com/krissistrunk/AID-Commander-Genesis/discussions"
+Changelog = "https://github.com/krissistrunk/AID-Commander-Genesis/blob/main/CHANGELOG.md"
+
+[project.scripts]
+aid-genesis = "aid_commander_genesis.cli:main"
+conceptcraft = "aid_commander_genesis.conceptcraft:main"
+aid-adaptive = "aid_commander_genesis.adaptive_intelligence:main"
+aid-story = "aid_commander_genesis.story_engine:main"
+aid-validate-unified = "aid_commander_genesis.unified_validation:main"
+aid-learning = "aid_commander_genesis.cross_project_learning:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["aid_commander_genesis"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"infrastructure" = "aid_commander_genesis/infrastructure"
+"docs" = "aid_commander_genesis/docs"
+"examples" = "aid_commander_genesis/examples"
+
+[tool.black]
+line-length = 88
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "ARG002", # unused method argument
+    "ARG001", # unused function argument
+]
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+strict_equality = true
+show_error_codes = true
+
+# Genesis-specific mypy configuration
+[[tool.mypy.overrides]]
+module = [
+    "graphiti.*",
+    "neo4j.*",
+    "chromadb.*",
+    "sentence_transformers.*",
+    "textual.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "conceptcraft: marks tests for ConceptCraft AI functionality",
+    "adaptive: marks tests for adaptive intelligence features",
+    "story_engine: marks tests for story processing features",
+    "knowledge_graph: marks tests related to knowledge graph functionality",
+    "validation: marks validation system tests",
+    "enterprise: marks enterprise-specific tests",
+    "creative: marks creative mode tests",
+    "cross_project: marks cross-project learning tests",
+]
+
+[tool.coverage.run]
+source = ["aid_commander_genesis"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "setup.py",
+    "*/infrastructure/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=aid_commander_genesis {args:tests}"
+cov-report = "coverage report"
+cov-html = "coverage html"
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "myst-parser>=2.0.0",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build docs docs/_build"
+serve = "python -m http.server 8000 --directory docs/_build"
